@@ -467,6 +467,15 @@ useMessageSource(() =>
   gap: var(--modern-space-1-5);
   font-variant-numeric: tabular-nums;
 }
+/* 并排刚成立时主栏比地址+权重窄，元信息换行会把列表窗压矮。只在这个容器区间不换行。 */
+@container modern-group-workspace (min-width: 981px) and (max-width: 1100px) {
+  .modern-group-workspace-meta {
+    flex-wrap: nowrap;
+  }
+  .modern-group-workspace-routing {
+    flex-shrink: 0;
+  }
+}
 .modern-group-workspace-sidebar {
   display: flex;
   min-width: 0;
