@@ -24,6 +24,7 @@ import {
   AppIcon,
   AppIconButton,
   AppProtocolTag,
+  AppTooltip,
 } from '@modern/components/ui'
 import type { SemanticTone } from '@modern/components/ui'
 import { useApiClient } from '@shared/http/client-context'
@@ -255,7 +256,9 @@ useMessageSource(() =>
           />
           <div class="modern-group-workspace-identity">
             <div class="modern-group-workspace-name">
-              <h1>{{ group.name }}</h1>
+              <AppTooltip :label="group.name"
+                ><h1>{{ group.name }}</h1></AppTooltip
+              >
               <AppBadge :tone="tone" class="modern-group-workspace-status" dot>{{
                 t('groups.row.state.' + group.availability)
               }}</AppBadge>
@@ -457,11 +460,6 @@ useMessageSource(() =>
   max-width: 100%;
   font-family: var(--modern-font-mono);
 }
-.modern-group-workspace-meta :deep(.modern-group-workspace-endpoint) {
-  max-width: 100%;
-  min-width: 0;
-  flex: 1 1 0%;
-}
 .modern-group-workspace-routing {
   display: inline-flex;
   align-items: center;
@@ -545,9 +543,6 @@ useMessageSource(() =>
   .modern-group-workspace-layout .modern-group-workspace-main :deep(.modern-list-scroll) {
     overflow: visible;
   }
-  .modern-group-workspace-layout .modern-group-workspace-main :deep(.modern-list-header) {
-    position: static;
-  }
   .modern-group-workspace-sidebar {
     flex: none;
     border-left: 0;
@@ -566,6 +561,8 @@ useMessageSource(() =>
   }
   .modern-group-workspace-name h1 {
     flex-basis: 100%;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
   }
   .modern-group-workspace-identity {
     padding-left: 0;
