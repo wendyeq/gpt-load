@@ -545,6 +545,9 @@ useMessageSource(() =>
   .modern-health-workspace {
     flex: none;
   }
+  .modern-health-workspace :deep(.modern-list-scroll) {
+    overscroll-behavior-y: auto;
+  }
   .modern-health-filters {
     padding-block: var(--modern-space-1-5);
     gap: var(--modern-space-1-5);

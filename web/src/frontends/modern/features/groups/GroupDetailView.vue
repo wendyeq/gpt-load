@@ -514,6 +514,9 @@ useMessageSource(() =>
   .modern-group-workspace-main {
     height: auto;
   }
+  .modern-group-workspace-main :deep(.modern-list-scroll) {
+    overscroll-behavior-y: auto;
+  }
 }
 @container modern-group-workspace (max-width: 420px) {
   .modern-group-workspace-header {
