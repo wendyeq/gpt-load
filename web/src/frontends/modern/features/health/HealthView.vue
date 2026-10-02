@@ -542,6 +542,9 @@ useMessageSource(() =>
   color: var(--modern-muted);
 }
 @media (max-width: 760px) {
+  .modern-health-workspace {
+    flex: none;
+  }
   .modern-health-filters {
     padding-top: var(--modern-space-3);
     gap: var(--modern-space-2);

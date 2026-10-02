@@ -494,12 +494,10 @@ useMessageSource(() =>
   .modern-group-workspace-layout {
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
     gap: var(--modern-space-5);
   }
   .modern-group-workspace-main {
     flex: none;
-    height: max(520px, calc(100dvh - var(--modern-topbar-height) - var(--modern-space-5)));
   }
   .modern-group-workspace-sidebar {
     flex: none;
