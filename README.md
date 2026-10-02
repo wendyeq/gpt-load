@@ -1,6 +1,6 @@
 # PR 对照图：①分组详情（手机/窄桌面适配）
 
-所有图均「左 = 基线 addd6987，右 = 修复（本 PR，含第二轮改动）」，同脚本、同视口、同 mock 数据、同 DPR（手机 2 / 桌面 1）、同等待时间；顶部标注基线/修复。宽度均 ≤1600px，单张 <1MB（PNG）。由 `/workspace/gpt-load-adapt/toolkit/run-page.sh group-detail ...` 生成。
+所有图均「左 = 基线 addd6987，右 = 修复（本 PR，含第三轮改动）」，同脚本、同视口、同 mock 数据、同 DPR（手机 2 / 桌面 1）、同等待时间；顶部标注基线/修复。宽度均 ≤1600px，单张 <1MB（PNG）。由 `/workspace/gpt-load-adapt/toolkit/run-page.sh group-detail ...` 生成。
 
 ## 手机整页长图（应用里是 `main.modern-content` 在滚；运行时展开滚动容器后截图，视口大小不变）
 | 文件 | 含义 |
