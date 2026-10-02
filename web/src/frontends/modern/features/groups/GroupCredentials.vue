@@ -1242,12 +1242,34 @@ defineExpose({ refresh })
 .modern-credential-cards--subscriptions {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--modern-account-card-min)), 1fr));
 }
+/* 主栏刚好并排、宽度不够默认 flex-basis 时，动作按钮会掉到第二行，把列表窗压矮。 */
+@container modern-credentials (max-width: 800px) {
+  .modern-credentials-toolbar > :first-child {
+    flex-basis: 140px;
+  }
+  .modern-credentials-filter-control {
+    flex-basis: 120px;
+  }
+}
+/* 主栏比两张账号卡的最小宽度略窄时仍并排，避免 720p 下一列卡高过列表窗。 */
+@container modern-credentials (min-width: 640px) and (max-width: 760px) {
+  .modern-credential-cards--subscriptions {
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 @container modern-credentials (max-width: 420px) {
   .modern-credentials-toolbar {
     flex-wrap: wrap;
+    padding-block: 0;
   }
   .modern-credentials-toolbar > :first-child {
     flex-basis: 100%;
+  }
+  .modern-credentials-filters :deep(.modern-segmented) {
+    flex-wrap: nowrap;
+    max-width: 100%;
+    overflow-x: auto;
   }
 }
 </style>

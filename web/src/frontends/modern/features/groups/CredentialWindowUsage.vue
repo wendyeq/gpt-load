@@ -226,4 +226,26 @@ function warning(window: CredentialQuota): string | undefined {
   color: var(--modern-text);
   font-weight: var(--modern-weight-medium);
 }
+@container modern-workspace-panel (max-width: 460px) {
+  .modern-window-usage-table {
+    overflow-x: auto;
+  }
+  .modern-window-usage-columns {
+    width: max-content;
+    min-width: 100%;
+    grid-template-columns:
+      minmax(120px, 1.4fr) minmax(72px, 0.9fr) minmax(72px, 0.8fr) minmax(72px, 0.8fr)
+      minmax(72px, 0.8fr) minmax(88px, 1.1fr);
+  }
+  .modern-window-usage-head > span {
+    white-space: nowrap;
+  }
+  .modern-window-usage-head > :first-child,
+  .modern-window-usage-identity {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: var(--modern-layer-raised);
+    background: var(--modern-surface);
+  }
+}
 </style>

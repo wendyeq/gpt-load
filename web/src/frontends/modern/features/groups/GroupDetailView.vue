@@ -433,6 +433,13 @@ useMessageSource(() =>
   gap: var(--modern-space-1);
 }
 .modern-group-workspace-name h1 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  min-width: 0;
+  max-width: 100%;
   overflow-wrap: anywhere;
   font-size: var(--modern-font-size-title);
   font-weight: var(--modern-weight-semibold);
@@ -449,6 +456,11 @@ useMessageSource(() =>
 .modern-group-workspace-endpoint {
   max-width: 100%;
   font-family: var(--modern-font-mono);
+}
+.modern-group-workspace-meta :deep(.modern-group-workspace-endpoint) {
+  max-width: 100%;
+  min-width: 0;
+  flex: 1 1 0%;
 }
 .modern-group-workspace-routing {
   display: inline-flex;
@@ -493,13 +505,48 @@ useMessageSource(() =>
 @container modern-group-workspace (max-width: 980px) {
   .modern-group-workspace-layout {
     display: flex;
+    flex: none;
     flex-direction: column;
-    overflow-y: auto;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: auto;
+    min-height: max-content;
+    overflow: visible;
     gap: var(--modern-space-5);
   }
   .modern-group-workspace-main {
     flex: none;
-    height: max(520px, calc(100dvh - var(--modern-topbar-height) - var(--modern-space-5)));
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: auto;
+  }
+  /* 堆叠时让列表跟着整页滚，不再套一个固定高度的内滚窗。 */
+  .modern-group-workspace-main :deep(.modern-credentials) {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: auto;
+  }
+  .modern-group-workspace-layout .modern-group-workspace-main :deep(.modern-list-frame),
+  .modern-group-workspace-layout .modern-group-workspace-main :deep(.modern-list-body),
+  .modern-group-workspace-layout .modern-group-workspace-main :deep(.modern-list-scroll) {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: auto;
+  }
+  .modern-group-workspace-layout .modern-group-workspace-main :deep(.modern-list-body) {
+    display: block;
+  }
+  .modern-group-workspace-layout .modern-group-workspace-main :deep(.modern-list-scroll) {
+    overflow: visible;
+  }
+  .modern-group-workspace-layout .modern-group-workspace-main :deep(.modern-list-header) {
+    position: static;
   }
   .modern-group-workspace-sidebar {
     flex: none;
@@ -508,9 +555,14 @@ useMessageSource(() =>
   }
 }
 @container modern-group-workspace (max-width: 420px) {
+  .modern-group-workspace-main {
+    gap: var(--modern-space-2);
+  }
   .modern-group-workspace-header {
     gap: var(--modern-space-2);
     align-items: flex-start;
+    padding-top: var(--modern-space-3);
+    padding-bottom: var(--modern-space-2);
   }
   .modern-group-workspace-name h1 {
     flex-basis: 100%;
