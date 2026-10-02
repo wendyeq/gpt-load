@@ -494,10 +494,12 @@ useMessageSource(() =>
   .modern-group-workspace-layout {
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
     gap: var(--modern-space-5);
   }
   .modern-group-workspace-main {
     flex: none;
+    height: max(520px, calc(100dvh - var(--modern-topbar-height) - var(--modern-space-5)));
   }
   .modern-group-workspace-sidebar {
     flex: none;
@@ -505,16 +507,28 @@ useMessageSource(() =>
     border-top: var(--modern-line-width) solid var(--modern-border);
   }
 }
+@container modern-group-workspace (max-width: 700px) {
+  .modern-group-workspace-layout {
+    overflow-y: visible;
+  }
+  .modern-group-workspace-main {
+    height: auto;
+  }
+}
 @container modern-group-workspace (max-width: 420px) {
   .modern-group-workspace-header {
     gap: var(--modern-space-2);
     align-items: flex-start;
+    padding-block: var(--modern-space-3) var(--modern-space-2);
   }
   .modern-group-workspace-name h1 {
     flex-basis: 100%;
+    font-size: var(--modern-font-size-body);
+    line-height: var(--modern-leading-compact);
   }
   .modern-group-workspace-identity {
     padding-left: 0;
+    gap: var(--modern-space-1-5);
   }
 }
 </style>
