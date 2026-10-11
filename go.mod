@@ -1,6 +1,6 @@
 module gpt-load
 
-go 1.27.0
+go 1.27.2
 
 require (
 	github.com/andybalholm/brotli v1.2.6
@@ -18,7 +18,7 @@ require (
 	github.com/pion/sdp/v3 v3.0.20
 	github.com/pion/stun/v3 v3.1.7
 	github.com/pion/webrtc/v4 v4.2.22
-	github.com/router-for-me/CLIProxyAPI/v8 v8.0.8
+	github.com/router-for-me/CLIProxyAPI/v8 v8.0.23
 	github.com/router-for-me/CLIProxyAPI/v8/gptload-embedded v0.0.0
 	github.com/sirupsen/logrus v1.10.2
 	github.com/tidwall/gjson v1.19.0
@@ -26,7 +26,7 @@ require (
 	github.com/tink-crypto/tink-go/v2 v2.8.0
 	go.uber.org/dig v1.19.0
 	golang.org/x/crypto v0.57.0
-	golang.org/x/net v0.59.0
+	golang.org/x/net v0.60.0
 	golang.org/x/sys v0.48.0
 	golang.org/x/text v0.42.0
 	gorm.io/driver/mysql v1.6.0
