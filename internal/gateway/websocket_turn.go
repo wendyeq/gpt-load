@@ -119,6 +119,12 @@ func (s *websocketConnection) newTurnRecorder(turn websocketTurn) *requestRecord
 	return recorder
 }
 
+func (s *websocketConnection) recordAuthorizedRequestBody(recorder *requestRecorder, body []byte) {
+	if key, authorized := s.authorized(s.handler.manager.Current()); authorized {
+		recorder.recordRequestBody(key, body)
+	}
+}
+
 func (s *websocketConnection) executeTurn(turn websocketTurn) {
 	var releaseRequest func()
 	defer func() {
@@ -141,22 +147,26 @@ func (s *websocketConnection) executeTurn(turn websocketTurn) {
 	}
 	defer finish()
 	reject := func(value reason) { recorder.completeReason(value); s.emitReason(turn.lane, value) }
-	if s.ctx.Err() != nil {
+	cancelTurn := func() {
+		s.recordAuthorizedRequestBody(recorder, turn.body)
 		recorder.completeCanceled(s.ctx, 0, -1)
+	}
+	if s.ctx.Err() != nil {
+		cancelTurn()
 		return
 	}
 	// 首次绑定期间其余流只等待，不提前冻结配置或取得额度 Ticket。
 	select {
 	case s.bind <- struct{}{}:
 	case <-s.ctx.Done():
-		recorder.completeCanceled(s.ctx, 0, -1)
+		cancelTurn()
 		return
 	}
 	var unlockOnce sync.Once
 	unlock := func() { unlockOnce.Do(func() { <-s.bind }) }
 	defer unlock()
 	if s.ctx.Err() != nil {
-		recorder.completeCanceled(s.ctx, 0, -1)
+		cancelTurn()
 		return
 	}
 	snapshot := h.manager.Current()
