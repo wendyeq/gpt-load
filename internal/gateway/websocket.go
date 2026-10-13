@@ -488,6 +488,7 @@ func (s *websocketConnection) run() {
 		for _, q := range queues {
 			for _, turn := range q {
 				recorder := s.newTurnRecorder(turn)
+				s.recordAuthorizedRequestBody(recorder, turn.body)
 				recorder.completeCanceled(s.ctx, 0, -1)
 				recorder.emit()
 				s.reserveInput(-len(turn.body))
@@ -526,7 +527,8 @@ func (s *websocketConnection) run() {
 					}
 				}
 				if turn.lane != "" && named >= limits.lanes {
-					s.reserveInput(-len(turn.body))
+					body := turn.body
+					s.reserveInput(-len(body))
 					turn.body = nil
 					// 新流尚无活动轮，拒绝可直接归属，不占用新的历史流名。
 					value := reason{400, "websocket_stream_limit_reached", "WebSocket stream limit reached. Reuse an existing stream_id or open a new connection."}
@@ -537,6 +539,9 @@ func (s *websocketConnection) run() {
 						value = reasonAccessKeyRateLimited
 					}
 					recorder := s.newTurnRecorder(turn)
+					if authorized {
+						recorder.recordRequestBody(key, body)
+					}
 					recorder.completeReason(value)
 					recorder.emit()
 					s.emitReason(turn.lane, value)
