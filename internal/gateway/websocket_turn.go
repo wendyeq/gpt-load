@@ -166,6 +166,7 @@ func (s *websocketConnection) executeTurn(turn websocketTurn) {
 		s.cancel()
 		return
 	}
+	recorder.recordRequestBody(key, turn.body)
 	releaseRequest, failure := h.acquireRequestConcurrency(key.ID)
 	if failure != nil {
 		reject(*failure)
@@ -1077,7 +1078,7 @@ func (s *websocketConnection) runWebsocketAttempt(ctx context.Context, cancel co
 				return err
 			}
 		}
-		if response.Model != "" {
+		if response.Model != "" && (!result.ResponseModelMismatch || response.Model != input.UpstreamModelID) {
 			result.UpstreamReportedModel = response.Model
 			result.ResponseModelObserved = true
 			result.ResponseModelMismatch = response.Model != input.UpstreamModelID
