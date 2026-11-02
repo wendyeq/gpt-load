@@ -18,13 +18,25 @@ const { t, te, n, locale } = useI18n()
 const minimumUsedPercent = 5
 const minimumRequests = 10
 const minimumCostNanoUSD = 10_000_000n
+const weeklyWindowSeconds = 7 * 24 * 60 * 60
 const rows = computed(() =>
-  sortedQuotaWindows(
-    props.windows.filter(
-      (window) => window.scope === 'account' && quotaWindowRange(window) !== undefined,
-    ),
-  ).map((window) => ({ window, estimate: estimate(window) })),
+  sortedQuotaWindows(props.windows.filter(includeWindow)).map((window) => ({
+    window,
+    estimate: estimate(window),
+  })),
 )
+const poolOnly = computed(() => rows.value.some((row) => row.window.scope === 'model'))
+function includeWindow(window: CredentialQuota): boolean {
+  if (quotaWindowRange(window) === undefined) return false
+  if (window.scope === 'account') return true
+  return window.scope === 'model' && window.windowSeconds === weeklyWindowSeconds
+}
+function usageAmount(window: CredentialQuota, field: 'tokens' | 'cost'): string {
+  if (!window.usage || window.usage.requests === 0) return '—'
+  return field === 'tokens'
+    ? formatCompactNumber(window.usage.tokens, locale.value)
+    : formatNanoUSD(window.usage.cost, locale.value, 'narrowSymbol', 2)
+}
 function usedPercent(window: CredentialQuota): string {
   const value = quotaRemaining(window)
   return value === undefined ? '—' : `${n(100 - value, { maximumFractionDigits: 1 })}%`
@@ -97,6 +109,9 @@ function warning(window: CredentialQuota): string | undefined {
   <section v-if="rows.length" class="modern-window-usage">
     <header class="modern-window-usage-heading">
       <h3>{{ t('credentialCards.windowUsage') }}</h3>
+      <p v-if="poolOnly" class="modern-window-usage-hint">
+        {{ t('credentialCards.windowUsagePoolHint') }}
+      </p>
     </header>
     <div
       class="modern-window-usage-table"
@@ -138,20 +153,21 @@ function warning(window: CredentialQuota): string | undefined {
         </div>
         <div role="cell">
           <AppOverflowText
-            :text="window.usage ? formatCompactNumber(window.usage.tokens, locale) : '—'"
-            :full-text="window.usage ? n(window.usage.tokens) : undefined"
+            :text="usageAmount(window, 'tokens')"
+            :full-text="window.usage && window.usage.requests ? n(window.usage.tokens) : undefined"
           />
         </div>
         <div role="cell">
-          <AppOverflowText
-            :text="window.usage ? formatNanoUSD(window.usage.cost, locale, 'narrowSymbol', 2) : '—'"
-          />
+          <AppOverflowText :text="usageAmount(window, 'cost')" />
         </div>
         <div role="cell" class="modern-window-usage-estimate">
           <AppOverflowText :text="projection.text" :hint="projection.hint" tabindex="0" />
         </div>
       </div>
     </div>
+    <p v-if="poolOnly" class="modern-window-usage-footnote">
+      {{ t('credentialCards.windowUsageFootnote') }}
+    </p>
   </section>
 </template>
 
@@ -170,6 +186,11 @@ function warning(window: CredentialQuota): string | undefined {
 .modern-window-usage-heading h3 {
   font-size: var(--modern-font-size-section);
   font-weight: var(--modern-weight-semibold);
+}
+.modern-window-usage-hint,
+.modern-window-usage-footnote {
+  color: var(--modern-muted);
+  font-size: var(--modern-font-size-caption);
 }
 .modern-window-usage-table {
   min-width: 0;

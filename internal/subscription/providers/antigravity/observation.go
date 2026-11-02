@@ -218,10 +218,14 @@ func antigravityPlan(value string) quotaPlanSummary {
 func antigravityQuotaSubject(value string) string {
 	normalized := strings.ToLower(strings.TrimSpace(value))
 	switch normalized {
-	case "gemini", "gemini models":
+	case "gemini":
 		return "Gemini"
-	case "claude/gpt", "claude and gpt models":
+	case "gemini models":
+		return "Gemini Models"
+	case "claude/gpt":
 		return "Claude/GPT"
+	case "claude and gpt models", "claude and gpt":
+		return "Claude and GPT"
 	default:
 		return strings.TrimSpace(value)
 	}

@@ -141,7 +141,7 @@ func TestNormalizeObservationIncludesUpstreamQuotaBuckets(t *testing.T) {
 		t.Fatalf("quota windows = %#v", snapshot.QuotaWindows)
 	}
 	window := snapshot.QuotaWindows[0]
-	if snapshot.Plan.Name != "Pro" || window.ID != "gemini-5h" || window.Label != "Gemini · 5h" ||
+	if snapshot.Plan.Name != "Pro" || window.ID != "gemini-5h" || window.Label != "Gemini Models · 5h" ||
 		window.Scope != "model" || window.Unit != "percent" || window.Remaining == nil || *window.Remaining != 75 ||
 		window.Utilization == nil || *window.Utilization != 0.25 || window.WindowSeconds == nil || *window.WindowSeconds != 5*60*60 ||
 		window.ResetAtMS == nil || *window.ResetAtMS != 1893456000000 {
@@ -171,7 +171,7 @@ func TestNormalizeObservationNormalizesClaudeGPTWeeklyWindow(t *testing.T) {
 	if err := json.Unmarshal(raw, &snapshot); err != nil {
 		t.Fatal(err)
 	}
-	if len(snapshot.QuotaWindows) != 1 || snapshot.QuotaWindows[0].Label != "Claude/GPT · 7d" {
+	if len(snapshot.QuotaWindows) != 1 || snapshot.QuotaWindows[0].Label != "Claude and GPT · 7d" {
 		t.Fatalf("quota windows = %#v", snapshot.QuotaWindows)
 	}
 }
@@ -199,7 +199,7 @@ func TestNormalizeObservationKeepsUnknownWindowLabelsDistinct(t *testing.T) {
 	for _, window := range snapshot.QuotaWindows {
 		byID[window.ID] = window.Label
 	}
-	if byID["weekly"] != "Gemini · Weekly" || byID["burst"] != "Gemini · Experimental Burst" {
+	if byID["weekly"] != "Gemini Models · Weekly" || byID["burst"] != "Gemini Models · Experimental Burst" {
 		t.Fatalf("quota labels = %#v", byID)
 	}
 }

@@ -893,6 +893,96 @@ func TestEnrichCredentialObservationUsageUsesHourlyStatsForEveryWindow(t *testin
 	}
 }
 
+func TestEnrichCredentialObservationUsageAttachesAntigravityWeeklyPools(t *testing.T) {
+	t.Parallel()
+	fixture := newServiceFixture(t)
+	now := time.Date(2026, time.August, 14, 12, 0, 0, 0, time.UTC)
+	fixture.service.now = func() time.Time { return now }
+	weekly := antigravityWeeklyWindowSeconds
+	fiveHour := int64(5 * 60 * 60)
+	accountReset := now.Add(2 * time.Hour).UnixMilli()
+	geminiReset := now.Add(3 * 24 * time.Hour).UnixMilli()
+	argonReset := now.Add(4 * 24 * time.Hour).UnixMilli()
+	claudeReset := now.Add(5 * 24 * time.Hour).UnixMilli()
+	fiveHourReset := now.Add(time.Hour).UnixMilli()
+	accountSeconds := int64((5 * time.Hour) / time.Second)
+	response := CredentialObservationResponse{
+		State: string(models.CredentialObservationFresh),
+		Snapshot: &CredentialObservationSnapshot{QuotaWindows: []ObservationQuotaWindow{
+			{ID: "account", Scope: "account", ResetAtMS: &accountReset, WindowSeconds: &accountSeconds},
+			{ID: "gemini-weekly", Label: "Gemini Models · 7d", Scope: "model", ResetAtMS: &geminiReset, WindowSeconds: &weekly},
+			{ID: "gemini-argon-wtu-weekly", Label: "Gemini 4 Argon · 7d", Scope: "model", ResetAtMS: &argonReset, WindowSeconds: &weekly},
+			{ID: "3p-weekly", Label: "Claude and GPT · 7d", Scope: "model", ResetAtMS: &claudeReset, WindowSeconds: &weekly},
+			{ID: "gemini-5h", Label: "Gemini Models · 5h", Scope: "model", ResetAtMS: &fiveHourReset, WindowSeconds: &fiveHour},
+		}},
+	}
+	reader := &recordingCredentialWindowUsageReader{}
+	reader.result = requestlog.CredentialWindowUsage{
+		UsageAggregate: requestlog.UsageAggregate{
+			RequestCount: 40, UncachedInputTokens: 400, OutputTokens: 40, EstimatedCostNanoUSD: 80_000_000,
+		},
+		DataComplete: true,
+	}
+	reader.modelResult = requestlog.CredentialWindowUsageByModel{
+		DataComplete: true,
+		Models: []requestlog.CredentialModelUsage{
+			{
+				Model: "gemini-3-pro",
+				UsageAggregate: requestlog.UsageAggregate{
+					RequestCount: 20, SuccessCount: 20, UncachedInputTokens: 200, OutputTokens: 20, EstimatedCostNanoUSD: 40_000_000,
+				},
+			},
+			{
+				Model: "gemini-argon",
+				UsageAggregate: requestlog.UsageAggregate{
+					RequestCount: 8, SuccessCount: 8, UncachedInputTokens: 80, OutputTokens: 8, EstimatedCostNanoUSD: 16_000_000,
+				},
+			},
+			{
+				Model: "claude-sonnet-4-5",
+				UsageAggregate: requestlog.UsageAggregate{
+					RequestCount: 3, SuccessCount: 3, UncachedInputTokens: 30, OutputTokens: 3, EstimatedCostNanoUSD: 5_000_000,
+				},
+			},
+			{
+				Model: "unpooled-router",
+				UsageAggregate: requestlog.UsageAggregate{
+					RequestCount: 9, SuccessCount: 9, UncachedInputTokens: 90, OutputTokens: 9, EstimatedCostNanoUSD: 19_000_000,
+				},
+			},
+		},
+	}
+	fixture.service.credentialWindowUsage = reader
+
+	fixture.service.enrichCredentialObservationUsage(t.Context(), 37, &response)
+
+	if len(reader.queries) != 1 {
+		t.Fatalf("account usage queries = %#v, want one account window", reader.queries)
+	}
+	if len(reader.modelQueries) != 3 {
+		t.Fatalf("model usage queries = %#v, want three weekly pools", reader.modelQueries)
+	}
+	windows := response.Snapshot.QuotaWindows
+	if windows[0].ObservedUsage == nil || windows[0].ObservedUsage.RequestCount != 40 {
+		t.Fatalf("account window usage = %#v", windows[0].ObservedUsage)
+	}
+	if windows[1].ObservedUsage == nil || windows[1].ObservedUsage.RequestCount != 20 ||
+		windows[1].ObservedUsage.EstimatedReferenceCostNanoUSD != "40000000" {
+		t.Fatalf("gemini pool usage = %#v", windows[1].ObservedUsage)
+	}
+	if windows[2].ObservedUsage == nil || windows[2].ObservedUsage.RequestCount != 8 ||
+		windows[2].ObservedUsage.EstimatedReferenceCostNanoUSD != "16000000" {
+		t.Fatalf("argon pool usage = %#v", windows[2].ObservedUsage)
+	}
+	if windows[3].ObservedUsage == nil || windows[3].ObservedUsage.RequestCount != 3 ||
+		windows[3].ObservedUsage.EstimatedReferenceCostNanoUSD != "5000000" {
+		t.Fatalf("claude pool usage = %#v, want the small sample still attached", windows[3].ObservedUsage)
+	}
+	if windows[4].ObservedUsage != nil {
+		t.Fatalf("5h model window usage = %#v, want none", windows[4].ObservedUsage)
+	}
+}
+
 func TestEnrichCredentialObservationUsageUsesRecordedWindowBoundaries(t *testing.T) {
 	t.Parallel()
 	fixture := newServiceFixture(t)
@@ -1102,8 +1192,10 @@ func TestRecoverCommittedRuntimeRestoresQuotaDisplayStateWithoutAffectingRouting
 }
 
 type recordingCredentialWindowUsageReader struct {
-	queries []requestlog.CredentialWindowUsageQuery
-	result  requestlog.CredentialWindowUsage
+	queries      []requestlog.CredentialWindowUsageQuery
+	modelQueries []requestlog.CredentialWindowUsageQuery
+	result       requestlog.CredentialWindowUsage
+	modelResult  requestlog.CredentialWindowUsageByModel
 }
 
 func (reader *recordingCredentialWindowUsageReader) QueryCredentialWindowUsage(
@@ -1112,6 +1204,16 @@ func (reader *recordingCredentialWindowUsageReader) QueryCredentialWindowUsage(
 ) (requestlog.CredentialWindowUsage, error) {
 	reader.queries = append(reader.queries, query)
 	result := reader.result
+	result.Source = query.Source
+	return result, nil
+}
+
+func (reader *recordingCredentialWindowUsageReader) QueryCredentialWindowUsageByModel(
+	_ context.Context,
+	query requestlog.CredentialWindowUsageQuery,
+) (requestlog.CredentialWindowUsageByModel, error) {
+	reader.modelQueries = append(reader.modelQueries, query)
+	result := reader.modelResult
 	result.Source = query.Source
 	return result, nil
 }
