@@ -520,7 +520,7 @@ func (s *Service) refreshCredentialObservationOnce(
 		s.mutations.Do(credentialID, func() { response, finishErr = finish() })
 	}
 	if finishErr == nil {
-		s.enrichCredentialObservationUsage(ctx, credentialID, &response)
+		s.enrichCredentialObservationUsage(ctx, credentialID, channelID, &response)
 	}
 	return response, finishErr
 }
@@ -688,16 +688,16 @@ func (s *Service) GetCredentialObservation(ctx context.Context, groupID, credent
 		return CredentialObservationResponse{}, err
 	}
 	response := observationResponseValue(withCredentialPlan(presentCredentialObservation(row, credential.IdentityFingerprint), account.PlanType))
-	s.enrichCredentialObservationUsage(ctx, credentialID, &response)
+	s.enrichCredentialObservationUsage(ctx, credentialID, channel.ID(group.ChannelID), &response)
 	return response, nil
 }
 
 func (s *Service) GetCredentialDetail(ctx context.Context, groupID, credentialID uint) (CredentialDetailResponse, error) {
-	item, err := s.loadCredentialItem(ctx, groupID, credentialID)
+	item, channelID, err := s.loadCredentialItem(ctx, groupID, credentialID)
 	if err != nil {
 		return CredentialDetailResponse{}, err
 	}
-	s.enrichCredentialObservationUsage(ctx, credentialID, item.Observation)
+	s.enrichCredentialObservationUsage(ctx, credentialID, channelID, item.Observation)
 	s.enrichCredentialDailyUsage(ctx, credentialID, &item)
 	observation := observationResponseValue(item.Observation)
 	return CredentialDetailResponse{Credential: item, Observation: observation}, nil
@@ -953,6 +953,7 @@ func (s *Service) enrichCredentialDailyUsage(
 func (s *Service) enrichCredentialObservationUsage(
 	ctx context.Context,
 	credentialID uint,
+	channelID channel.ID,
 	response *CredentialObservationResponse,
 ) {
 	if s == nil || s.credentialWindowUsage == nil || credentialID == 0 ||
@@ -980,7 +981,7 @@ func (s *Service) enrichCredentialObservationUsage(
 			if err != nil {
 				continue
 			}
-		case antigravityWeeklyModelWindow(*window):
+		case channelID == channel.Antigravity && antigravityWeeklyModelWindow(*window):
 			byModel, err := s.credentialWindowUsage.QueryCredentialWindowUsageByModel(ctx, query)
 			if err != nil {
 				continue

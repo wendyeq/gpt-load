@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"math"
-	"sort"
 
 	"gorm.io/gorm"
 
@@ -104,7 +103,7 @@ func (service *Service) QueryCredentialWindowUsageByModel(
 		ctx = context.Background()
 	}
 	switch input.Source {
-	case CredentialWindowUsageSourceRequestLogs, CredentialWindowUsageSourceHourlyStats:
+	case CredentialWindowUsageSourceHourlyStats:
 	default:
 		return CredentialWindowUsageByModel{}, fmt.Errorf(
 			"query credential window usage by model: unsupported source %q",
@@ -119,12 +118,7 @@ func (service *Service) QueryCredentialWindowUsageByModel(
 		Operation:      "credential window usage by model read transaction",
 	}, func(connection *gorm.DB) error {
 		var queryErr error
-		switch input.Source {
-		case CredentialWindowUsageSourceRequestLogs:
-			result, queryErr = service.queryCredentialRequestLogUsageByModel(connection, input)
-		case CredentialWindowUsageSourceHourlyStats:
-			result, queryErr = service.queryCredentialHourlyUsageByModel(connection, input)
-		}
+		result, queryErr = service.queryCredentialHourlyUsageByModel(connection, input)
 		return queryErr
 	})
 	if err != nil {
@@ -260,21 +254,6 @@ func alignHourUp(value int64) (int64, error) {
 	return aligned + epochms.MillisecondsPerHour, nil
 }
 
-func (service *Service) queryCredentialRequestLogUsageByModel(
-	db *gorm.DB,
-	input CredentialWindowUsageQuery,
-) (CredentialWindowUsageByModel, error) {
-	rows, err := service.scanCredentialRequestLogUsageByModel(db, input)
-	if err != nil {
-		return CredentialWindowUsageByModel{}, err
-	}
-	return credentialWindowUsageByModelFromMap(
-		CredentialWindowUsageSourceRequestLogs,
-		service.requestLogWindowRetained(input.FromMS),
-		rows,
-	), nil
-}
-
 func (service *Service) scanCredentialRequestLogUsageByModel(
 	db *gorm.DB,
 	input CredentialWindowUsageQuery,
@@ -300,7 +279,6 @@ func (service *Service) scanCredentialRequestLogUsageByModel(
 		}
 		result[row.Model] = CredentialWindowUsage{
 			UsageAggregate: row.UsageAggregate,
-			Source:         CredentialWindowUsageSourceRequestLogs,
 			LastUsedAtMS:   row.LastUsedAtMS,
 		}
 	}
@@ -344,8 +322,6 @@ func (service *Service) queryCredentialHourlyUsageByModel(
 			}
 			result[row.Model] = CredentialWindowUsage{
 				UsageAggregate: row.UsageAggregate,
-				Source:         CredentialWindowUsageSourceHourlyStats,
-				DataComplete:   true,
 				LastUsedAtMS:   row.LastUsedAtMS,
 			}
 		}
@@ -366,11 +342,6 @@ func (service *Service) queryCredentialHourlyUsageByModel(
 		}
 		retained := service.requestLogWindowRetained(fromMS)
 		dataComplete = dataComplete && retained
-		for model, usage := range boundary {
-			usage.Source = CredentialWindowUsageSourceHourlyStats
-			usage.DataComplete = retained
-			boundary[model] = usage
-		}
 		return mergeModelWindowUsage(result, boundary)
 	}
 
@@ -410,7 +381,6 @@ func mergeModelWindowUsage(
 			return fmt.Errorf("merge %q usage: %w", model, err)
 		}
 		existing.UsageAggregate = merged
-		existing.DataComplete = existing.DataComplete && incoming.DataComplete
 		if incoming.LastUsedAtMS != nil &&
 			(existing.LastUsedAtMS == nil || *incoming.LastUsedAtMS > *existing.LastUsedAtMS) {
 			existing.LastUsedAtMS = incoming.LastUsedAtMS
@@ -433,7 +403,6 @@ func credentialWindowUsageByModelFromMap(
 			LastUsedAtMS:   usage.LastUsedAtMS,
 		})
 	}
-	sort.Slice(models, func(i, j int) bool { return models[i].Model < models[j].Model })
 	return CredentialWindowUsageByModel{
 		Source:       source,
 		DataComplete: dataComplete,

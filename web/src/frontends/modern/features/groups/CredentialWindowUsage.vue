@@ -13,7 +13,7 @@ import {
   sortedQuotaWindows,
 } from './credential-presentation'
 
-const props = defineProps<{ windows: readonly CredentialQuota[] }>()
+const props = defineProps<{ windows: readonly CredentialQuota[]; channelId?: string }>()
 const { t, te, n, locale } = useI18n()
 const minimumUsedPercent = 5
 const minimumRequests = 10
@@ -28,13 +28,11 @@ const rows = computed(() =>
 function includeWindow(window: CredentialQuota): boolean {
   if (quotaWindowRange(window) === undefined) return false
   if (window.scope === 'account') return true
-  return window.scope === 'model' && window.windowSeconds === weeklyWindowSeconds
-}
-function usageAmount(window: CredentialQuota, field: 'tokens' | 'cost'): string {
-  if (!window.usage || window.usage.requests === 0) return '—'
-  return field === 'tokens'
-    ? formatCompactNumber(window.usage.tokens, locale.value)
-    : formatNanoUSD(window.usage.cost, locale.value, 'narrowSymbol', 2)
+  return (
+    props.channelId === 'antigravity' &&
+    window.scope === 'model' &&
+    window.windowSeconds === weeklyWindowSeconds
+  )
 }
 function usedPercent(window: CredentialQuota): string {
   const value = quotaRemaining(window)
@@ -149,12 +147,14 @@ function warning(window: CredentialQuota): string | undefined {
         </div>
         <div role="cell">
           <AppOverflowText
-            :text="usageAmount(window, 'tokens')"
-            :full-text="window.usage && window.usage.requests ? n(window.usage.tokens) : undefined"
+            :text="window.usage ? formatCompactNumber(window.usage.tokens, locale) : '—'"
+            :full-text="window.usage ? n(window.usage.tokens) : undefined"
           />
         </div>
         <div role="cell">
-          <AppOverflowText :text="usageAmount(window, 'cost')" />
+          <AppOverflowText
+            :text="window.usage ? formatNanoUSD(window.usage.cost, locale, 'narrowSymbol', 2) : '—'"
+          />
         </div>
         <div role="cell" class="modern-window-usage-estimate">
           <AppOverflowText :text="projection.text" :hint="projection.hint" tabindex="0" />

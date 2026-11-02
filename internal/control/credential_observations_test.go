@@ -868,7 +868,7 @@ func TestEnrichCredentialObservationUsageUsesHourlyStatsForEveryWindow(t *testin
 	}
 	fixture.service.credentialWindowUsage = reader
 
-	fixture.service.enrichCredentialObservationUsage(t.Context(), 37, &response)
+	fixture.service.enrichCredentialObservationUsage(t.Context(), 37, channel.Claude, &response)
 
 	if len(reader.queries) != 2 {
 		t.Fatalf("usage queries = %#v, want two account windows", reader.queries)
@@ -932,7 +932,7 @@ func TestEnrichCredentialObservationUsageAttachesAntigravityWeeklyPools(t *testi
 	}
 	fixture.service.credentialWindowUsage = reader
 
-	fixture.service.enrichCredentialObservationUsage(t.Context(), 37, &response)
+	fixture.service.enrichCredentialObservationUsage(t.Context(), 37, channel.Antigravity, &response)
 
 	if len(reader.queries) != 1 || len(reader.modelQueries) != 3 {
 		t.Fatalf("queries account=%#v model=%#v", reader.queries, reader.modelQueries)
@@ -955,6 +955,51 @@ func TestEnrichCredentialObservationUsageAttachesAntigravityWeeklyPools(t *testi
 	}
 }
 
+func TestEnrichCredentialObservationUsageSkipsNonAntigravityWeeklyModelWindows(t *testing.T) {
+	t.Parallel()
+	fixture := newServiceFixture(t)
+	now := time.Date(2026, time.August, 14, 12, 0, 0, 0, time.UTC)
+	fixture.service.now = func() time.Time { return now }
+	weekly := antigravityWeeklyWindowSeconds
+	fiveHour := int64(5 * 60 * 60)
+	accountReset := now.Add(2 * time.Hour).UnixMilli()
+	geminiReset := now.Add(3 * 24 * time.Hour).UnixMilli()
+	argonReset := now.Add(4 * 24 * time.Hour).UnixMilli()
+	claudeReset := now.Add(5 * 24 * time.Hour).UnixMilli()
+	fiveHourReset := now.Add(time.Hour).UnixMilli()
+	accountSeconds := int64((5 * time.Hour) / time.Second)
+	response := CredentialObservationResponse{
+		State: string(models.CredentialObservationFresh),
+		Snapshot: &CredentialObservationSnapshot{QuotaWindows: []ObservationQuotaWindow{
+			{ID: "account", Scope: "account", ResetAtMS: &accountReset, WindowSeconds: &accountSeconds},
+			{ID: "gemini-weekly", Label: "Gemini · 7d", Scope: "model", ResetAtMS: &geminiReset, WindowSeconds: &weekly},
+			{ID: "gemini-argon-wtu-weekly", Label: "Gemini 4 Argon · 7d", Scope: "model", ResetAtMS: &argonReset, WindowSeconds: &weekly},
+			{ID: "3p-weekly", Label: "Claude/GPT · 7d", Scope: "model", ResetAtMS: &claudeReset, WindowSeconds: &weekly},
+			{ID: "gemini-5h", Label: "Gemini · 5h", Scope: "model", ResetAtMS: &fiveHourReset, WindowSeconds: &fiveHour},
+		}},
+	}
+	reader := &recordingCredentialWindowUsageReader{
+		result: requestlog.CredentialWindowUsage{
+			UsageAggregate: requestlog.UsageAggregate{RequestCount: 40, SuccessCount: 40},
+			DataComplete:   true,
+		},
+	}
+	fixture.service.credentialWindowUsage = reader
+
+	fixture.service.enrichCredentialObservationUsage(t.Context(), 37, channel.Claude, &response)
+
+	if len(reader.queries) != 1 || len(reader.modelQueries) != 0 {
+		t.Fatalf("queries account=%#v model=%#v", reader.queries, reader.modelQueries)
+	}
+	windows := response.Snapshot.QuotaWindows
+	if windows[0].ObservedUsage == nil || windows[0].ObservedUsage.RequestCount != 40 {
+		t.Fatalf("account window usage = %#v", windows[0].ObservedUsage)
+	}
+	if windows[1].ObservedUsage != nil || windows[2].ObservedUsage != nil || windows[3].ObservedUsage != nil {
+		t.Fatalf("model 7d windows attached usage: gemini=%#v argon=%#v 3p=%#v", windows[1].ObservedUsage, windows[2].ObservedUsage, windows[3].ObservedUsage)
+	}
+}
+
 func TestEnrichCredentialObservationUsageUsesRecordedWindowBoundaries(t *testing.T) {
 	t.Parallel()
 	fixture := newServiceFixture(t)
@@ -973,7 +1018,7 @@ func TestEnrichCredentialObservationUsageUsesRecordedWindowBoundaries(t *testing
 	reader := &recordingCredentialWindowUsageReader{}
 	fixture.service.credentialWindowUsage = reader
 
-	fixture.service.enrichCredentialObservationUsage(t.Context(), 37, &response)
+	fixture.service.enrichCredentialObservationUsage(t.Context(), 37, channel.Claude, &response)
 
 	if len(reader.queries) != 2 {
 		t.Fatalf("usage queries = %#v, want one query per recorded window", reader.queries)
@@ -1024,7 +1069,7 @@ func TestEnrichCredentialObservationUsageSkipsNonCurrentObservation(t *testing.T
 				}}},
 			}
 
-			fixture.service.enrichCredentialObservationUsage(t.Context(), 37, &response)
+			fixture.service.enrichCredentialObservationUsage(t.Context(), 37, channel.Claude, &response)
 
 			if len(reader.queries) != 0 || response.Snapshot.QuotaWindows[0].ObservedUsage != nil {
 				t.Fatalf("non-current observation was enriched: queries=%#v response=%#v", reader.queries, response)

@@ -61,23 +61,18 @@ func antigravityClassifyModel(model string) antigravityQuotaPool {
 	if antigravityClaudeOrGPTModel(normalized) {
 		return antigravityPoolClaudeGPT
 	}
-	if strings.Contains(normalized, "gemini") || strings.Contains(normalized, "gemma") {
+	if strings.Contains(normalized, "gemini") {
 		return antigravityPoolGemini
 	}
 	return antigravityPoolUnknown
 }
 
 func antigravityClaudeOrGPTModel(model string) bool {
-	if strings.Contains(model, "claude") || strings.Contains(model, "chatgpt") {
+	if strings.Contains(model, "claude") {
 		return true
 	}
 	if model == "gpt" || strings.HasPrefix(model, "gpt-") || strings.Contains(model, "-gpt-") {
 		return true
-	}
-	for _, name := range []string{"o1", "o3", "o4"} {
-		if model == name || strings.HasPrefix(model, name+"-") {
-			return true
-		}
 	}
 	return false
 }
