@@ -25,7 +25,6 @@ const rows = computed(() =>
     estimate: estimate(window),
   })),
 )
-const hasModelPoolRows = computed(() => rows.value.some((row) => row.window.scope === 'model'))
 function includeWindow(window: CredentialQuota): boolean {
   if (quotaWindowRange(window) === undefined) return false
   if (window.scope === 'account') return true
@@ -109,9 +108,6 @@ function warning(window: CredentialQuota): string | undefined {
   <section v-if="rows.length" class="modern-window-usage">
     <header class="modern-window-usage-heading">
       <h3>{{ t('credentialCards.windowUsage') }}</h3>
-      <p v-if="hasModelPoolRows" class="modern-window-usage-hint">
-        {{ t('credentialCards.windowUsagePoolHint') }}
-      </p>
     </header>
     <div
       class="modern-window-usage-table"
@@ -165,9 +161,6 @@ function warning(window: CredentialQuota): string | undefined {
         </div>
       </div>
     </div>
-    <p v-if="hasModelPoolRows" class="modern-window-usage-footnote">
-      {{ t('credentialCards.windowUsageFootnote') }}
-    </p>
   </section>
 </template>
 
@@ -186,11 +179,6 @@ function warning(window: CredentialQuota): string | undefined {
 .modern-window-usage-heading h3 {
   font-size: var(--modern-font-size-section);
   font-weight: var(--modern-weight-semibold);
-}
-.modern-window-usage-hint,
-.modern-window-usage-footnote {
-  color: var(--modern-muted);
-  font-size: var(--modern-font-size-caption);
 }
 .modern-window-usage-table {
   min-width: 0;

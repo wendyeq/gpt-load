@@ -31,13 +31,13 @@ func TestAntigravityModelBelongsToWindowUsesPoolIdentity(t *testing.T) {
 	t.Parallel()
 	weekly := antigravityWeeklyWindowSeconds
 	gemini := ObservationQuotaWindow{
-		ID: "gemini-weekly", Label: "Gemini Models · 7d", Scope: "model", WindowSeconds: &weekly,
+		ID: "gemini-weekly", Label: "Gemini · 7d", Scope: "model", WindowSeconds: &weekly,
 	}
 	argon := ObservationQuotaWindow{
 		ID: "gemini-argon-wtu-weekly", Label: "Gemini 4 Argon · 7d", Scope: "model", WindowSeconds: &weekly,
 	}
 	claude := ObservationQuotaWindow{
-		ID: "3p-weekly", Label: "Claude and GPT · 7d", Scope: "model", WindowSeconds: &weekly,
+		ID: "3p-weekly", Label: "Claude/GPT · 7d", Scope: "model", WindowSeconds: &weekly,
 	}
 	unknown := ObservationQuotaWindow{
 		ID: "custom-weekly", Label: "Custom API Pool · 7d", Scope: "model", WindowSeconds: &weekly,

@@ -38,10 +38,10 @@ func TestNormalizeObservationPreservesQuotaGroupNamesAndValues(t *testing.T) {
 		seconds   int64
 		resetAtMS int64
 	}{
-		{"gemini-weekly", "Gemini Models · 7d", 77.8, 604800, 1792796699000},
-		{"gemini-5h", "Gemini Models · 5h", 98.1, 18000, 1792751516000},
-		{"3p-weekly", "Claude and GPT · 7d", 1.8, 604800, 1792759289000},
-		{"3p-5h", "Claude and GPT · 5h", 100, 18000, 1792763996000},
+		{"gemini-weekly", "Gemini · 7d", 77.8, 604800, 1792796699000},
+		{"gemini-5h", "Gemini · 5h", 98.1, 18000, 1792751516000},
+		{"3p-weekly", "Claude/GPT · 7d", 1.8, 604800, 1792759289000},
+		{"3p-5h", "Claude/GPT · 5h", 100, 18000, 1792763996000},
 		{"gemini-argon-wtu-weekly", "Gemini 4 Argon · 7d", 100, 604800, 1793350796000},
 	}
 	if len(snapshot.QuotaWindows) != len(want) {
@@ -95,17 +95,17 @@ func TestNormalizeObservationDisambiguatesQuotaLabels(t *testing.T) {
 		{
 			name:        "distinct bucket names",
 			bucketNames: []string{"Standard Pool", "Special WTU Pool"},
-			wantLabels:  []string{"Gemini Models (Standard Pool) · 7d", "Gemini Models (Special WTU Pool) · 7d"},
+			wantLabels:  []string{"Gemini (Standard Pool) · 7d", "Gemini (Special WTU Pool) · 7d"},
 		},
 		{
 			name:        "identical bucket names",
 			bucketNames: []string{"Weekly Limit Remaining", "Weekly Limit Remaining"},
-			wantLabels:  []string{"Gemini Models (gemini-weekly) · 7d", "Gemini Models (gemini-special-weekly) · 7d"},
+			wantLabels:  []string{"Gemini (gemini-weekly) · 7d", "Gemini (gemini-special-weekly) · 7d"},
 		},
 		{
 			name:        "missing bucket names",
 			bucketNames: []string{"", ""},
-			wantLabels:  []string{"Gemini Models (gemini-weekly) · 7d", "Gemini Models (gemini-special-weekly) · 7d"},
+			wantLabels:  []string{"Gemini (gemini-weekly) · 7d", "Gemini (gemini-special-weekly) · 7d"},
 		},
 	} {
 		t.Run(test.name, func(t *testing.T) {
@@ -133,7 +133,7 @@ func TestNormalizeObservationDisambiguatesQuotaLabels(t *testing.T) {
 				want := map[string]string{
 					"gemini-weekly":         test.wantLabels[0],
 					"gemini-special-weekly": test.wantLabels[1],
-					"gemini-5h":             "Gemini Models · 5h",
+					"gemini-5h":             "Gemini · 5h",
 				}
 				if !reflect.DeepEqual(labels, want) {
 					t.Errorf("labels = %v, want %v", labels, want)
@@ -178,7 +178,7 @@ func TestNormalizeObservationKeepsMixedNameAndIDFallbacksUnique(t *testing.T) {
 			labels[window.ID] = window.Label
 			seen[window.Label] = window.ID
 		}
-		if labels["gemini-a"] != "Gemini Models (gemini-b) · 7d" || labels["gemini-d"] != "Gemini Models (gemini-b, 2) · 7d" {
+		if labels["gemini-a"] != "Gemini (gemini-b) · 7d" || labels["gemini-d"] != "Gemini (gemini-b, 2) · 7d" {
 			t.Errorf("already distinct bucket names changed: %v", labels)
 		}
 		if firstLabels == nil {

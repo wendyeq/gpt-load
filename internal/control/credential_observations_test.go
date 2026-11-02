@@ -910,10 +910,10 @@ func TestEnrichCredentialObservationUsageAttachesAntigravityWeeklyPools(t *testi
 		State: string(models.CredentialObservationFresh),
 		Snapshot: &CredentialObservationSnapshot{QuotaWindows: []ObservationQuotaWindow{
 			{ID: "account", Scope: "account", ResetAtMS: &accountReset, WindowSeconds: &accountSeconds},
-			{ID: "gemini-weekly", Label: "Gemini Models · 7d", Scope: "model", ResetAtMS: &geminiReset, WindowSeconds: &weekly},
+			{ID: "gemini-weekly", Label: "Gemini · 7d", Scope: "model", ResetAtMS: &geminiReset, WindowSeconds: &weekly},
 			{ID: "gemini-argon-wtu-weekly", Label: "Gemini 4 Argon · 7d", Scope: "model", ResetAtMS: &argonReset, WindowSeconds: &weekly},
-			{ID: "3p-weekly", Label: "Claude and GPT · 7d", Scope: "model", ResetAtMS: &claudeReset, WindowSeconds: &weekly},
-			{ID: "gemini-5h", Label: "Gemini Models · 5h", Scope: "model", ResetAtMS: &fiveHourReset, WindowSeconds: &fiveHour},
+			{ID: "3p-weekly", Label: "Claude/GPT · 7d", Scope: "model", ResetAtMS: &claudeReset, WindowSeconds: &weekly},
+			{ID: "gemini-5h", Label: "Gemini · 5h", Scope: "model", ResetAtMS: &fiveHourReset, WindowSeconds: &fiveHour},
 		}},
 	}
 	reader := &recordingCredentialWindowUsageReader{}
