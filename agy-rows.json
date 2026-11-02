@@ -1,0 +1,38 @@
+{
+  "heading": "额度窗口内用量",
+  "rows": [
+    {
+      "name": "Gemini · 7d",
+      "texts": [
+        "Gemini · 7d",
+        "32%",
+        "54",
+        "1.8M",
+        "$1.24",
+        "≈ $3.88"
+      ]
+    },
+    {
+      "name": "Claude/GPT · 7d",
+      "texts": [
+        "Claude/GPT · 7d",
+        "1%",
+        "3",
+        "12K",
+        "<$0.01",
+        "—"
+      ]
+    },
+    {
+      "name": "Gemini 4 Argon · 7d",
+      "texts": [
+        "Gemini 4 Argon · 7d",
+        "18%",
+        "22",
+        "640K",
+        "$0.41",
+        "≈ $2.28"
+      ]
+    }
+  ]
+}
