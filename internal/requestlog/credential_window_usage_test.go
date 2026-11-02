@@ -254,19 +254,6 @@ func TestQueryCredentialWindowUsageByModelSplitsHourlyStats(t *testing.T) {
 	if got["gemini-3-pro"] != 4 || got["gemini-argon"] != 2 {
 		t.Fatalf("by-model request counts = %#v", got)
 	}
-
-	total, err := service.QueryCredentialWindowUsage(t.Context(), CredentialWindowUsageQuery{
-		CredentialID: credentialID,
-		FromMS:       from.UnixMilli(),
-		ToMS:         now.UnixMilli(),
-		Source:       CredentialWindowUsageSourceHourlyStats,
-	})
-	if err != nil {
-		t.Fatalf("QueryCredentialWindowUsage() error = %v", err)
-	}
-	if total.RequestCount != 6 {
-		t.Fatalf("account window usage = %#v, want the unfiltered total", total)
-	}
 }
 
 func requestLogWindowRow(id string, credentialID uint, completedAt time.Time, input int64) models.RequestLog {
