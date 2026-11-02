@@ -74,11 +74,10 @@ func antigravityClaudeOrGPTModel(model string) bool {
 	if model == "gpt" || strings.HasPrefix(model, "gpt-") || strings.Contains(model, "-gpt-") {
 		return true
 	}
-	if model == "o1" || model == "o3" || model == "o4" {
-		return true
-	}
-	if strings.HasPrefix(model, "o1-") || strings.HasPrefix(model, "o3-") || strings.HasPrefix(model, "o4-") {
-		return true
+	for _, name := range []string{"o1", "o3", "o4"} {
+		if model == name || strings.HasPrefix(model, name+"-") {
+			return true
+		}
 	}
 	return false
 }

@@ -972,29 +972,29 @@ func (s *Service) enrichCredentialObservationUsage(
 			ToMS:         toMS,
 			Source:       requestlog.CredentialWindowUsageSourceHourlyStats,
 		}
+		var observed requestlog.CredentialWindowUsage
 		switch {
 		case window.Scope == "account":
-			observed, err := s.credentialWindowUsage.QueryCredentialWindowUsage(ctx, query)
+			var err error
+			observed, err = s.credentialWindowUsage.QueryCredentialWindowUsage(ctx, query)
 			if err != nil {
 				continue
-			}
-			mapped, mappedOK := mapObservationWindowUsage(fromMS, toMS, observed)
-			if mappedOK {
-				window.ObservedUsage = mapped
 			}
 		case antigravityWeeklyModelWindow(*window):
 			byModel, err := s.credentialWindowUsage.QueryCredentialWindowUsageByModel(ctx, query)
 			if err != nil {
 				continue
 			}
-			observed, observedOK := sumAntigravityPoolWindowUsage(*window, byModel)
+			var observedOK bool
+			observed, observedOK = sumAntigravityPoolWindowUsage(*window, byModel)
 			if !observedOK {
 				continue
 			}
-			mapped, mappedOK := mapObservationWindowUsage(fromMS, toMS, observed)
-			if mappedOK {
-				window.ObservedUsage = mapped
-			}
+		default:
+			continue
+		}
+		if mapped, mappedOK := mapObservationWindowUsage(fromMS, toMS, observed); mappedOK {
+			window.ObservedUsage = mapped
 		}
 	}
 }
