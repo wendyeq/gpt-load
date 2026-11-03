@@ -15,7 +15,7 @@ import {
   AppTooltip,
 } from '@modern/components/ui'
 import type { LogColumnId } from './log-columns'
-import { logNumber, logOutputRate, logTime } from './log-display'
+import { logGenerationRate, logNumber, logOutputRate, logTime } from './log-display'
 import LogValue from './LogValue.vue'
 import LogModelWarning from './LogModelWarning.vue'
 import LogFilterLink from './LogFilterLink.vue'
@@ -104,6 +104,8 @@ const date = computed(() =>
   }).format(props.row.completed_at_ms),
 )
 const fullTime = computed(() => logTime(props.row.completed_at_ms, locale.value, true))
+const outputRate = computed(() => logOutputRate(props.row, locale.value))
+const generationRate = computed(() => logGenerationRate(props.row, locale.value))
 // 今天的记录只显示时分秒，不是今天的才带日期；悬停时间仍可看到完整时间。
 const showDate = computed(
   () => new Date(props.row.completed_at_ms).toDateString() !== new Date().toDateString(),
@@ -402,9 +404,18 @@ function fieldFilterValue(field: LogColumnId): string {
     </div>
     <div
       class="modern-log-cell-value modern-log-speed"
-      :aria-label="t('logs.outputRate') + ': ' + logOutputRate(row, locale)"
+      :aria-label="
+        t('logs.outputRate') +
+        ': ' +
+        outputRate +
+        ', ' +
+        t('logs.generationRate') +
+        ': ' +
+        generationRate
+      "
     >
-      {{ logOutputRate(row, locale) }}
+      <span>{{ outputRate }}</span>
+      <span>{{ t('logs.generationRate') }} {{ generationRate }}</span>
     </div>
   </div>
   <div v-else-if="fields[0] === 'estimated_cost_nano_usd'" class="modern-log-cell-stack">
@@ -628,9 +639,14 @@ function fieldFilterValue(field: LogColumnId): string {
   min-width: 0;
 }
 .modern-log-speed {
+  flex-wrap: wrap;
   font-family: var(--modern-font-mono);
   font-size: var(--modern-font-size-small);
   font-variant-numeric: tabular-nums;
+}
+.modern-log-speed > span {
+  min-width: 0;
+  max-width: 100%;
 }
 .modern-log-cell-value.is-model {
   font-family: var(--modern-font-mono);

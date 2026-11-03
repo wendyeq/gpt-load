@@ -35,6 +35,7 @@ import {
 import { formatCacheHitRate } from '@/lib/cache-rate'
 import {
   formatLogDuration,
+  formatLogGenerationRate,
   formatLogOutputRate,
   formatLogTokenCount,
   formatRequestLogReasoning,
@@ -534,6 +535,10 @@ function decisionRuleLabel(ruleID: string): string {
           <div>
             <dt>{{ t('monitor.logs.drawer.outputRate') }}</dt>
             <dd>{{ formatLogOutputRate(log, locale) }}</dd>
+          </div>
+          <div>
+            <dt>{{ t('monitor.logs.drawer.generationRate') }}</dt>
+            <dd>{{ formatLogGenerationRate(log, locale) }}</dd>
           </div>
         </dl>
         <div v-if="mainErrorCode || mainErrorMessage" class="log-error-message">

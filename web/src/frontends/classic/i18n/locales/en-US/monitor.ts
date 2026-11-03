@@ -904,6 +904,7 @@ export default {
         duration: 'Duration',
         firstResponse: 'First response',
         outputRate: 'Average output speed',
+        generationRate: 'Generation speed',
         attemptCount: 'Attempts',
         request: 'Client request',
         finalExecution: 'Upstream execution',

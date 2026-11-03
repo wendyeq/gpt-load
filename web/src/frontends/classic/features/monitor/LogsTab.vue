@@ -51,6 +51,7 @@ import {
 import { formatCacheHitRate } from '@/lib/cache-rate'
 import {
   formatLogDuration,
+  formatLogGenerationRate,
   formatLogOutputRate,
   formatLogReasoning,
   formatLogTokenCount,
@@ -752,6 +753,14 @@ function timingPrimary(log: RequestLogItemDto): string {
   return `${first} / ${formatLogDuration(log.duration_ms)}`
 }
 
+function outputRate(log: RequestLogItemDto): string {
+  return formatLogOutputRate(log, locale.value)
+}
+
+function generationRate(log: RequestLogItemDto): string {
+  return formatLogGenerationRate(log, locale.value)
+}
+
 function costLabel(log: RequestLogItemDto): string {
   const state = requestLogCostDisplayState(log)
   if (state === 'complete') {
@@ -1118,8 +1127,9 @@ function costLabel(log: RequestLogItemDto): string {
             :data-label="t('monitor.logs.columns.timing')"
           >
             <span>{{ timingPrimary(log) }}</span>
-            <small v-if="formatLogOutputRate(log, locale) !== '—'">
-              {{ formatLogOutputRate(log, locale) }}
+            <small class="logs-list__rates">
+              <span v-if="outputRate(log) !== '—'">{{ outputRate(log) }}</span>
+              <span>{{ t('monitor.logs.drawer.generationRate') }} {{ generationRate(log) }}</span>
             </small>
           </div>
           <div
@@ -1252,6 +1262,16 @@ function costLabel(log: RequestLogItemDto): string {
   font-weight: 400;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.logs-list__rates {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 6px;
+  min-width: 0;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: unset;
 }
 
 .logs-list__time {

@@ -1,4 +1,4 @@
-import { outputTokensPerSecond } from '@shared/output-rate'
+import { generationTokensPerSecond, outputTokensPerSecond } from '@shared/output-rate'
 import { numberFormatter, dateFormatter } from '@modern/components/ui/intl-formatters'
 import type { LogEntry } from '@modern/api/logs'
 import type { SemanticTone } from '@modern/components/ui'
@@ -63,12 +63,21 @@ export function logDuration(ms: number | null, locale: string): string {
     }).format(ms < 1000 ? ms : ms / 1000) + (ms < 1000 ? 'ms' : 's')
   )
 }
-export function logOutputRate(row: LogEntry, locale: string): string {
-  const rate = outputTokensPerSecond(row)
+
+function formatTokensPerSecond(rate: number | null, locale: string): string {
   return rate === null
     ? '—'
     : numberFormatter(locale, { maximumFractionDigits: 1 }).format(rate) + 't/s'
 }
+
+export function logOutputRate(row: LogEntry, locale: string): string {
+  return formatTokensPerSecond(outputTokensPerSecond(row), locale)
+}
+
+export function logGenerationRate(row: LogEntry, locale: string): string {
+  return formatTokensPerSecond(generationTokensPerSecond(row), locale)
+}
+
 export function logTime(ms: number, locale: string, full = false): string {
   return dateFormatter(locale, {
     ...(full ? { year: 'numeric' as const } : {}),

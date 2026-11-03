@@ -1,4 +1,4 @@
-import { outputTokensPerSecond } from '@shared/output-rate'
+import { generationTokensPerSecond, outputTokensPerSecond } from '@shared/output-rate'
 import type { RequestLogItemDto, RequestLogReasoningDto } from '@/app/resources/request-logs'
 
 export type RequestLogUsageDisplayState = 'reported' | 'missing' | 'not_applicable'
@@ -101,11 +101,18 @@ function formatSignedInteger(value: string, locale: string): string {
   }
 }
 
-export function formatLogOutputRate(log: RequestLogItemDto, locale: string): string {
-  const rate = outputTokensPerSecond(log)
+function formatTokensPerSecond(rate: number | null, locale: string): string {
   return rate === null
     ? '—'
     : `${new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(rate)} t/s`
+}
+
+export function formatLogOutputRate(log: RequestLogItemDto, locale: string): string {
+  return formatTokensPerSecond(outputTokensPerSecond(log), locale)
+}
+
+export function formatLogGenerationRate(log: RequestLogItemDto, locale: string): string {
+  return formatTokensPerSecond(generationTokensPerSecond(log), locale)
 }
 
 export function hasRequestLogCache(log: RequestLogItemDto): boolean {
