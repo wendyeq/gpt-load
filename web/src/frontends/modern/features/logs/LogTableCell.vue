@@ -394,7 +394,10 @@ function fieldFilterValue(field: LogColumnId): string {
       </div>
     </div>
   </div>
-  <div v-else-if="fields.includes('duration_ms')" class="modern-log-cell-stack is-paired">
+  <div
+    v-else-if="fields.includes('duration_ms')"
+    class="modern-log-cell-stack is-paired modern-log-timing"
+  >
     <div class="modern-log-cell-value">
       <LogValue :row="row" column="duration_ms" table />
       <template v-if="fields.includes('first_response_ms')">
@@ -403,7 +406,7 @@ function fieldFilterValue(field: LogColumnId): string {
       </template>
     </div>
     <div
-      class="modern-log-cell-value modern-log-speed"
+      class="modern-log-speed"
       :aria-label="
         t('logs.outputRate') +
         ': ' +
@@ -415,7 +418,9 @@ function fieldFilterValue(field: LogColumnId): string {
       "
     >
       <span>{{ outputRate }}</span>
-      <span>{{ t('logs.generationRate') }} {{ generationRate }}</span>
+      <AppTooltip :label="t('logs.generationRate')">
+        <span>{{ t('logs.generationRateShort') }} {{ generationRate }}</span>
+      </AppTooltip>
     </div>
   </div>
   <div v-else-if="fields[0] === 'estimated_cost_nano_usd'" class="modern-log-cell-stack">
@@ -638,15 +643,45 @@ function fieldFilterValue(field: LogColumnId): string {
 .modern-log-cell-value > :last-child {
   min-width: 0;
 }
+/* 拉满列宽后再省略，文本对齐继承数字列，避免压过父级的左对齐覆盖。 */
+.modern-log-timing {
+  width: 100%;
+  max-width: 100%;
+}
+.modern-log-timing > .modern-log-cell-value {
+  display: block;
+  justify-self: stretch;
+  width: 100%;
+  max-width: 100%;
+  height: var(--modern-badge-xs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: var(--modern-badge-xs);
+}
+.modern-log-timing > .modern-log-cell-value > * + * {
+  margin-inline-start: var(--modern-space-1-5);
+}
 .modern-log-speed {
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-rows: repeat(2, var(--modern-badge-xs));
+  align-items: center;
+  gap: var(--modern-space-0-5);
+  justify-self: stretch;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   font-family: var(--modern-font-mono);
   font-size: var(--modern-font-size-small);
   font-variant-numeric: tabular-nums;
+  line-height: var(--modern-badge-xs);
 }
 .modern-log-speed > span {
   min-width: 0;
   max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .modern-log-cell-value.is-model {
   font-family: var(--modern-font-mono);

@@ -14,6 +14,7 @@ export const zhCN = {
   modelNotObserved: '未观测到',
   outputRate: '平均输出速度',
   generationRate: '生成速度',
+  generationRateShort: '生成',
   pricingModeHint: '按 {mode} 价格计价',
   contextTierHint: '输入 Token ≥ {threshold}',
   affinityKinds: {
@@ -345,6 +346,7 @@ export const enUS: typeof zhCN = {
   modelNotObserved: 'Not observed',
   outputRate: 'Average output speed',
   generationRate: 'Generation speed',
+  generationRateShort: 'Gen',
   pricingModeHint: 'Priced using {mode} rates',
   contextTierHint: 'Input tokens ≥ {threshold}',
   affinityKinds: {
@@ -679,6 +681,7 @@ export const jaJP: typeof zhCN = {
   modelNotObserved: '未観測',
   outputRate: '平均出力速度',
   generationRate: '生成速度',
+  generationRateShort: '生成',
   pricingModeHint: '{mode} 料金を適用',
   contextTierHint: '入力トークン ≥ {threshold}',
   affinityKinds: {
