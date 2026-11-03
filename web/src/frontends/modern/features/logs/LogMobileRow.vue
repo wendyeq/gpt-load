@@ -9,6 +9,7 @@ import { AppBadge, AppButton, AppIcon, AppProtocolTag } from '@modern/components
 import {
   logCacheWrites,
   logDuration,
+  logGenerationRate,
   logHasUsage,
   logModelMismatch,
   logMoney,
@@ -91,9 +92,15 @@ const metrics = computed(() => {
     { label: t('logs.columns.input_tokens') + ' Token', value: tokens(row.input_tokens) },
     { label: t('logs.columns.output_tokens') + ' Token', value: tokens(row.output_tokens) },
     { label: t('logs.columns.estimated_cost_nano_usd'), value: cost },
+  ]
+})
+const rates = computed(() => {
+  const row = props.row
+  return [
     ...(row.stream
       ? [{ label: t('logs.outputRate'), value: logOutputRate(row, locale.value) }]
       : []),
+    { label: t('logs.generationRate'), value: logGenerationRate(row, locale.value) },
   ]
 })
 const cache = computed(() =>
@@ -154,6 +161,12 @@ const cache = computed(() =>
       <span v-for="item in metrics" :key="item.label" class="modern-log-mobile-metric">
         <span class="modern-log-mobile-label">{{ item.label }}</span>
         <strong>{{ item.value }}</strong>
+      </span>
+      <span class="modern-log-mobile-rate-pair">
+        <span v-for="item in rates" :key="item.label" class="modern-log-mobile-metric">
+          <span class="modern-log-mobile-label">{{ item.label }}</span>
+          <strong>{{ item.value }}</strong>
+        </span>
       </span>
     </span>
     <span v-if="cache.length" class="modern-log-mobile-cache">
@@ -282,6 +295,13 @@ const cache = computed(() =>
   padding-top: var(--modern-space-2);
   border-top: var(--modern-line-width) solid var(--modern-border);
   font-variant-numeric: tabular-nums;
+}
+.modern-log-mobile-rate-pair {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--modern-space-1-5) var(--modern-space-3);
+  min-width: 0;
 }
 .modern-log-mobile-metric {
   display: flex;

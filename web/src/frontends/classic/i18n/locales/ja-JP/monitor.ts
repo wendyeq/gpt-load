@@ -903,6 +903,7 @@ export default {
         duration: '所要時間',
         firstResponse: '初回応答',
         outputRate: '平均出力速度',
+        generationRate: '生成速度',
         attemptCount: '試行回数',
         request: 'クライアントリクエスト',
         finalExecution: 'アップストリーム実行',

@@ -34,6 +34,7 @@ import {
   exactLogMoney,
   logCacheWrites,
   logDuration,
+  logGenerationRate,
   logNumber,
   logOutputRate,
   logStatusTone,
@@ -73,6 +74,9 @@ const requestBodySize = computed(() =>
     : '',
 )
 const outputRate = computed(() => (log.value ? logOutputRate(log.value, locale.value) : '—'))
+const generationRate = computed(() =>
+  log.value ? logGenerationRate(log.value, locale.value) : '—',
+)
 const outcomeFields = computed<LogColumnId[]>(() => [
   'status_code',
   'stream',
@@ -308,6 +312,10 @@ function decisionRuleLabel(ruleID: string): string {
                       class="modern-log-stream-rate"
                       :aria-label="t('logs.outputRate') + ': ' + outputRate"
                       >&nbsp;·&nbsp;{{ outputRate }}</span
+                    >
+                    <span :aria-label="t('logs.generationRate') + ': ' + generationRate"
+                      >&nbsp;·&nbsp;{{ t('logs.generationRate') }}
+                      <span class="modern-log-stream-rate">{{ generationRate }}</span></span
                     >
                   </template>
                   <LogValue

@@ -13,6 +13,8 @@ export const zhCN = {
   returnedModelUnknownHint: '请求上游模型：{requested}\n上游未返回模型标识，无法确认模型是否一致。',
   modelNotObserved: '未观测到',
   outputRate: '平均输出速度',
+  generationRate: '生成速度',
+  generationRateShort: '生成',
   pricingModeHint: '按 {mode} 价格计价',
   contextTierHint: '输入 Token ≥ {threshold}',
   affinityKinds: {
@@ -343,6 +345,8 @@ export const enUS: typeof zhCN = {
     'Requested upstream model: {requested}\nThe upstream did not report a model identifier, so consistency cannot be verified.',
   modelNotObserved: 'Not observed',
   outputRate: 'Average output speed',
+  generationRate: 'Generation speed',
+  generationRateShort: 'Gen',
   pricingModeHint: 'Priced using {mode} rates',
   contextTierHint: 'Input tokens ≥ {threshold}',
   affinityKinds: {
@@ -676,6 +680,8 @@ export const jaJP: typeof zhCN = {
     '要求した上流モデル：{requested}\n上流からモデル識別子が返されなかったため、一致を確認できません。',
   modelNotObserved: '未観測',
   outputRate: '平均出力速度',
+  generationRate: '生成速度',
+  generationRateShort: '生成',
   pricingModeHint: '{mode} 料金を適用',
   contextTierHint: '入力トークン ≥ {threshold}',
   affinityKinds: {

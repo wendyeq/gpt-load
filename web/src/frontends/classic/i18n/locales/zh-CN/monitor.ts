@@ -884,6 +884,7 @@ export default {
         duration: '耗时',
         firstResponse: '首响',
         outputRate: '平均输出速度',
+        generationRate: '生成速度',
         attemptCount: '尝试次数',
         request: '客户端请求',
         finalExecution: '上游执行',
