@@ -32,12 +32,16 @@
 <table>
 <tbody>
 <tr>
-<td width="180"><a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer"><img src="./screenshot/ofoxai.svg" alt="OfoxAI" width="150"></a></td>
-<td><strong>OfoxAI：一个平台，连接文本、图像与视频 AI</strong><br>OfoxAI 是统一的 AI API 平台，汇集多家文本、图像和视频模型，支持 OpenAI 兼容接口及 Anthropic、Gemini 原生接口。开发者可通过一个平台为 AI 应用、智能体和内容创作接入模型，按任务选择合适的能力。 <a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer">探索 OfoxAI 模型与 API →</a></td>
+<td width="180"><a href="https://www.qiniu.com/ai/free-models/conatus-2026?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=comatus_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer"><img src="./screenshot/qiniu-sponsor.png" alt="七牛云" width="150"></a></td>
+<td>感谢 <strong>七牛云</strong> 赞助本项目！<br>七牛云（02567.HK）旗下企业级 MaaS 平台，一站式调用全球 150+ 主流模型，兼容全球主流模型厂商协议，覆盖文本、图像、音频、视频、文件处理等全模态处理能力，服务超过 180 万企业级开发者用户。<br><strong>企业新用户免费领 2000 万 token；年终回馈，新用户<a href="https://www.qiniu.com/ai/free-models/conatus-2026?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=comatus_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer">最高免费享 10 亿 Token/日</a></strong></td>
 </tr>
 <tr>
-<td width="180"><a href="https://www.packyapi.ai/register?aff=ahiS" target="_blank" rel="sponsored noopener noreferrer"><picture><source media="(prefers-color-scheme: dark)" srcset="./screenshot/packycode-dark.png"><source media="(prefers-color-scheme: light)" srcset="./screenshot/packycode-light.png"><img src="./screenshot/packycode-light.png" alt="PackyCode" width="150"></picture></a></td>
-<td><strong>PackyCode</strong><br>PackyCode 是一家稳定、高效的 API 中转服务商。一句话接入主流大模型。统一域名、统一密钥、智能容灾切换，97% 可用性。人民币1:1充值，无汇率无手续费坑，新用户首充立享折扣 + $1免费体验额度，多分组折扣低至 2 折起，提供专属Codex/Claude Code高速通道。<a href="https://www.packyapi.ai/register?aff=ahiS" target="_blank" rel="sponsored noopener noreferrer">点此链接注册，立即开始使用！</a></td>
+<td width="180"><a href="https://api.fenno.ai/?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=fenno_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer"><img src="./screenshot/fenno-sponsor.jpg" alt="Fenno.ai" width="150"></a></td>
+<td>感谢Fenno.ai 赞助了本项目！<br>Fenno.ai 是面向编程场景的 API 中转服务商，主营 Codex 中转，把 GPT、Claude、Grok 等编程模型统一到一个 API Key 下，兼容 OpenAI 与 Anthropic 双协议，可直连 Codex、Claude Code、Cline、OpenCode 等主流编程工具，支持国内及海外主体公对公结算与开票。<br><strong>新用户<a href="https://api.fenno.ai/?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=fenno_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer">1.99 美元体验 50 美元额度</a>；邀请好友最高 20% 返佣，多邀多得。</strong></td>
+</tr>
+<tr>
+<td width="180"><a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer"><img src="./screenshot/ofoxai.svg" alt="OfoxAI" width="150"></a></td>
+<td><strong>OfoxAI：一个平台，连接文本、图像与视频 AI</strong><br>OfoxAI 是统一的 AI API 平台，汇集多家文本、图像和视频模型，支持 OpenAI 兼容接口及 Anthropic、Gemini 原生接口。开发者可通过一个平台为 AI 应用、智能体和内容创作接入模型，按任务选择合适的能力。 <a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer">探索 OfoxAI 模型与 API →</a></td>
 </tr>
 <tr>
 <td width="180"><a href="https://www.axisnow.io/zh"><img src="./screenshot/axisnow.jpg" alt="AxisNow" width="150"></a></td>
@@ -145,6 +149,7 @@ Codex、Claude、Antigravity 的 OAuth 客户端使用固定回调端口。Compo
 | Anthropic Messages      | `POST /v1/messages`                                                |
 | Gemini                  | `/v1beta/models/...`                                               |
 | Gemini Embeddings       | `POST /v1beta/models/{model}:embedContent` / `:batchEmbedContents` |
+| Gemini Decisions        | `POST /v1beta/decisions`                                           |
 
 ### 内置渠道
 

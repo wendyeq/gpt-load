@@ -32,12 +32,16 @@ English · [中文](README_CN.md) · [日本語](README_JP.md) | [Official Websi
 <table>
 <tbody>
 <tr>
-<td width="180"><a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer"><img src="./screenshot/ofoxai.svg" alt="OfoxAI" width="150"></a></td>
-<td><strong>OfoxAI: Text, image, and video AI in one platform</strong><br>OfoxAI is a unified AI API platform bringing together text, image, and video models from multiple providers. With OpenAI-compatible endpoints and native Anthropic and Gemini interfaces, developers can access models for AI applications, agents, and content creation through one platform. <a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer">Explore OfoxAI models and APIs →</a></td>
+<td width="180"><a href="https://www.qiniu.com/ai/free-models/conatus-2026?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=comatus_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer"><img src="./screenshot/qiniu-sponsor.png" alt="Qiniu Cloud" width="150"></a></td>
+<td><strong>Thank you to Qiniu Cloud for sponsoring this project!</strong><br>Qiniu Cloud (02567.HK) offers an enterprise MaaS platform that gives you one-stop access to over 150 leading models worldwide. It supports major model providers&#x27; protocols and handles text, images, audio, video, and files, serving more than 1.8 million enterprise developers.<br><strong>New enterprise users can claim 20 million tokens for free. With the year-end offer, new users can get <a href="https://www.qiniu.com/ai/free-models/conatus-2026?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=comatus_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer">up to 1 billion free tokens per day</a>.</strong></td>
 </tr>
 <tr>
-<td width="180"><a href="https://www.packyapi.ai/register?aff=ahiS" target="_blank" rel="sponsored noopener noreferrer"><picture><source media="(prefers-color-scheme: dark)" srcset="./screenshot/packycode-dark.png"><source media="(prefers-color-scheme: light)" srcset="./screenshot/packycode-light.png"><img src="./screenshot/packycode-light.png" alt="PackyCode" width="150"></picture></a></td>
-<td><strong>PackyCode</strong><br>Access leading AI models through PackyCode with one API endpoint and one API key. Enjoy fast, reliable access with automatic failover and dedicated high-speed routes for Codex and Claude Code. Get started with $1 in free credits, a discount on your first top-up, and savings of up to 80% on eligible routes. Pay in RMB with no currency conversion markups or extra top-up fees. <a href="https://www.packyapi.ai/register?aff=ahiS" target="_blank" rel="sponsored noopener noreferrer">Sign up through the link and start building today.</a></td>
+<td width="180"><a href="https://api.fenno.ai/?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=fenno_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer"><img src="./screenshot/fenno-sponsor.jpg" alt="Fenno.ai" width="150"></a></td>
+<td><strong>Thank you to Fenno.ai for sponsoring this project!</strong><br>Fenno.ai is an API gateway for coding, with a focus on Codex. Use one API key for coding models such as GPT, Claude, and Grok. It supports both OpenAI and Anthropic protocols and connects directly to tools such as Codex, Claude Code, Cline, and OpenCode. Business-to-business payments and invoicing are available for entities in China and overseas.<br><strong>New users can <a href="https://api.fenno.ai/?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=fenno_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer">try $50 in credits for $1.99</a>. Earn up to 20% in referral commissions when you invite friends. The more you invite, the more you earn.</strong></td>
+</tr>
+<tr>
+<td width="180"><a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer"><img src="./screenshot/ofoxai.svg" alt="OfoxAI" width="150"></a></td>
+<td><strong>OfoxAI: Text, image, and video AI in one platform</strong><br>OfoxAI is a unified AI API platform bringing together text, image, and video models from multiple providers. With OpenAI-compatible endpoints and native Anthropic and Gemini interfaces, developers can access models for AI applications, agents, and content creation through one platform. <a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer">Explore OfoxAI models and APIs →</a></td>
 </tr>
 <tr>
 <td width="180"><a href="https://www.axisnow.io/zh"><img src="./screenshot/axisnow.jpg" alt="AxisNow" width="150"></a></td>
@@ -145,6 +149,7 @@ When working over SSH or from a remote browser, the browser's `localhost` may no
 | Anthropic Messages      | `POST /v1/messages`                                                |
 | Gemini                  | `/v1beta/models/...`                                               |
 | Gemini Embeddings       | `POST /v1beta/models/{model}:embedContent` / `:batchEmbedContents` |
+| Gemini Decisions        | `POST /v1beta/decisions`                                           |
 
 ### Built-in channels
 

@@ -32,12 +32,16 @@ API キー、サブスクリプションアカウント、トラフィック制�
 <table>
 <tbody>
 <tr>
-<td width="180"><a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer"><img src="./screenshot/ofoxai.svg" alt="OfoxAI" width="150"></a></td>
-<td><strong>OfoxAI：テキスト・画像・動画 AI を一つのプラットフォームで</strong><br>OfoxAI は、複数のプロバイダーのテキスト・画像・動画モデルを集約する AI API プラットフォームです。OpenAI 互換 API と Anthropic・Gemini のネイティブ API に対応。開発者は一つのプラットフォームから AI アプリ、エージェント、コンテンツ制作向けのモデルを利用し、タスクに合った機能を選べます。 <a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer">OfoxAI のモデルと API を見る →</a></td>
+<td width="180"><a href="https://www.qiniu.com/ai/free-models/conatus-2026?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=comatus_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer"><img src="./screenshot/qiniu-sponsor.png" alt="Qiniu Cloud" width="150"></a></td>
+<td><strong>Qiniu Cloud の本プロジェクトへのご支援に感謝します！</strong><br>Qiniu Cloud（02567.HK）が提供する企業向け MaaS プラットフォームです。世界の主要モデル 150 種類以上を一か所から利用でき、主要なモデル提供元のプロトコルに対応しています。テキスト、画像、音声、動画、ファイルなどのマルチモーダル処理に対応し、180 万人を超える企業の開発者に利用されています。<br><strong>新規法人ユーザーは 2,000 万トークンを無料で受け取れます。年末キャンペーンでは、新規ユーザーは<a href="https://www.qiniu.com/ai/free-models/conatus-2026?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=comatus_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer">1 日あたり最大 10 億トークンを無料で利用できます</a>。</strong></td>
 </tr>
 <tr>
-<td width="180"><a href="https://www.packyapi.ai/register?aff=ahiS" target="_blank" rel="sponsored noopener noreferrer"><picture><source media="(prefers-color-scheme: dark)" srcset="./screenshot/packycode-dark.png"><source media="(prefers-color-scheme: light)" srcset="./screenshot/packycode-light.png"><img src="./screenshot/packycode-light.png" alt="PackyCode" width="150"></picture></a></td>
-<td><strong>PackyCode</strong><br>PackyCode は、安定性と効率性を重視した AI API 中継サービスです。ひとつの API エンドポイントと API キーで主要な大規模モデルに接続できます。統一ドメイン、統一キー、スマートな障害切り替えに対応し、可用性は 97% としています。人民元で 1:1 チャージでき、為替差損や追加手数料の心配はありません。新規ユーザーは初回チャージ割引と $1 の無料体験クレジットを受け取れ、複数グループでは最大 80% の割引、Codex／Claude Code 専用の高速ルートも利用できます。<a href="https://www.packyapi.ai/register?aff=ahiS" target="_blank" rel="sponsored noopener noreferrer">リンクから登録して、すぐに利用を開始できます。</a></td>
+<td width="180"><a href="https://api.fenno.ai/?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=fenno_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer"><img src="./screenshot/fenno-sponsor.jpg" alt="Fenno.ai" width="150"></a></td>
+<td><strong>Fenno.ai の本プロジェクトへのご支援に感謝します！</strong><br>Fenno.ai はコーディング向けの API ゲートウェイで、Codex の中継を主力としています。GPT、Claude、Grok などのコーディング用モデルを 1 つの API キーで利用でき、OpenAI と Anthropic の両プロトコルに対応。Codex、Claude Code、Cline、OpenCode などの主要な開発ツールに直接接続できます。中国国内と海外の法人向けに、法人間決済と請求書発行に対応しています。<br><strong>新規ユーザーは<a href="https://api.fenno.ai/?utm_source=gpt_load&amp;utm_medium=oss&amp;utm_campaign=fenno_202611&amp;utm_content=readme" target="_blank" rel="sponsored noopener noreferrer">1.99 ドルで 50 ドル分のクレジットを試せます</a>。友人を紹介すると最大 20% の紹介報酬を獲得でき、紹介するほど報酬が増えます。</strong></td>
+</tr>
+<tr>
+<td width="180"><a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer"><img src="./screenshot/ofoxai.svg" alt="OfoxAI" width="150"></a></td>
+<td><strong>OfoxAI：テキスト・画像・動画 AI を一つのプラットフォームで</strong><br>OfoxAI は、複数のプロバイダーのテキスト・画像・動画モデルを集約する AI API プラットフォームです。OpenAI 互換 API と Anthropic・Gemini のネイティブ API に対応。開発者は一つのプラットフォームから AI アプリ、エージェント、コンテンツ制作向けのモデルを利用し、タスクに合った機能を選べます。 <a href="https://ofox.ai/?utm_source=github&amp;utm_medium=sponsorship&amp;utm_content=gpt_load" target="_blank" rel="noopener noreferrer">OfoxAI のモデルと API を見る →</a></td>
 </tr>
 <tr>
 <td width="180"><a href="https://www.axisnow.io/zh"><img src="./screenshot/axisnow.jpg" alt="AxisNow" width="150"></a></td>
@@ -145,6 +149,7 @@ SSH やリモートブラウザ経由で操作する場合、ブラウザの `lo
 | Anthropic Messages      | `POST /v1/messages`                                                |
 | Gemini                  | `/v1beta/models/...`                                               |
 | Gemini Embeddings       | `POST /v1beta/models/{model}:embedContent` / `:batchEmbedContents` |
+| Gemini Decisions        | `POST /v1beta/decisions`                                           |
 
 ### 組み込みチャネル
 
